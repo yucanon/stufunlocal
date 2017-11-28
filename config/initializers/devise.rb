@@ -6,7 +6,7 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = '4e5dfa2cdc8753faaece11b146ed731d038eb0946e653f4d850aea85f537108cc91359b9fee377e5485b36e6f514c399399b3f8c67ef18804e952815277ab4e4'
+  # config.secret_key = '3eda667dd7e7205806f7dc3b8d2def6e108c0636cb7406e0ac67d20135b5df5771a58b42fc734f81e4e720e52220dd0c4688034147c2d73e377d7075fa288e68'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -90,6 +90,12 @@ Devise.setup do |config|
   # from the server. You can disable this option at your own risk.
   # config.clean_up_csrf_token_on_authentication = true
 
+  # When false, Devise will not attempt to reload routes on eager load.
+  # This can reduce the time taken to boot the app but if your application
+  # requires the Devise mappings to be loaded during boot time the application
+  # won't boot properly.
+  # config.reload_routes = true
+
   # ==> Configuration for :database_authenticatable
   # For bcrypt, this is the cost for hashing the password and defaults to 11. If
   # using other algorithms, it sets how many times you want the password to be hashed.
@@ -102,7 +108,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 11
 
   # Set up a pepper to generate the hashed password.
-  # config.pepper = '0b247061cd3993a9b1c517d5c3c715a3a47f2f1d4c98fa4779fe9d9e7bf9303a0ebbc7d605bdc85eb2ebe9aefe77836a83c21f6432826ac8de0bdc4abac81106'
+  # config.pepper = 'e07f8edf3240c2853c8484b2d38e58c1439e94b11a20c2041ed44a5b6554217f561aef52709db38d9119f32cc847027d004f5f49d4b64ea4e52f2876875578ad'
 
   # Send a notification email when the user's password is changed
   # config.send_password_change_notification = false
@@ -265,5 +271,7 @@ Devise.setup do |config|
   # When using OmniAuth, Devise cannot automatically set OmniAuth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
-  config.omniauth :facebook, "437000366670200", "ef0001a4e08c934f315f7602fcbbfc8c", scope: 'email', info_fields: 'email,name', secure_image_url: true
+  Devise.setup do |config|
+    config.omniauth :facebook, "1200579700051817", "1ef2b10b8d1a82bf8ab2466fdee1967d", scope: 'email', info_fields: 'email,name', secure_image_url: true
+  end
 end

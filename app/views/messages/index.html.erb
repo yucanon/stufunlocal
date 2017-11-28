@@ -3,22 +3,38 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3 text-center">
+        <%if !@other.image.blank? %>
             <%= image_tag @other.image, class: "img-circle profile-1" %><br>
-            <strong><%= @other.name %></strong>
-            <br>
-            <%= link_to "Show Profile", @other, class: "btn btn-default btn-wide row-space-2 row-space-top-2" %>
+        <%else%>
+            <%= image_tag ("avatar-default.png"),class:"img-circle profile-1" %>
+        <%end%>
+            <strong style="text-align:center;"><br><br><%= @other.name %>さん<br></strong>
+            <%= link_to "プロフィールを見る", @other, class: "btn btn-default btn-wide row-space-2 row-space-top-2" %>
+
+            <%= form_for [@conversation, @conversation.messages.new], remote: true do |f| %>
+
+            　　　　　　　<%= f.hidden_field :body, value:"お祝い金申請" %>
+                        <%= f.hidden_field :moneygift, value: 1 %>
+                        <%= f.hidden_field :user_id, value: current_user.id %>
+                        
+                        <div class="actions" style="margin-bottom:30px; margin-top:-25px;">
+                            <%= f.submit '採用されたのでお祝い金を申請する', :class =>'btn btn-primary btn-wide row-space-2 row-space-top-2' %>
+                        </div>
+                    <% end %>
+
+
         </div>
 
         <div class="col-md-9">
             
             <div class="panel panel-default">
                 <div class="panel-heading">
-                     Conversation with <%= @other.name %>
+                     <%= @other.name %>さんにメッセージを送る
                 </div>
                 <div class="panel-body">
                     <%= form_for [@conversation, @conversation.messages.new], remote: true do |f| %>
                         <div class="form-group">
-                            <%= f.text_area :body, placeholder: "Write your messages here", class: "form-control" %>
+                            <%= f.text_area :body, placeholder: "ここにメッセージを入力してください", class: "form-control" %>
                         </div>
 
                         <%= f.hidden_field :user_id, value: current_user.id %>
@@ -35,5 +51,4 @@
             </div>
         </div>
     </div>
-    <%= subscribe_to conversation_messages_path(@conversation)%>
 </div>

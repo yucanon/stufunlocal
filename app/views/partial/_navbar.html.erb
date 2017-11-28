@@ -1,4 +1,5 @@
-  <nav class="navbar navbar-devise">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -8,31 +9,30 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">Brand</a>   
-    </div>
-
-     <!-- Location Search Form -->
-    <div class="navbar-form navbar-left form-group row-space-2">
-      <%= text_field_tag :search, params[:search], placeholder: "どちらまで?", class: "form-control",id:"pac-input" %>
+      <a class="navbar-brand" href="/">Brand</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right" style="color:black">
         <% if (!user_signed_in?) %>
-          <!-- ログインしていない時 -->
-          <li><%= link_to "シッターになる", new_listing_path %></li>
-          <li><a href="#">利用の流れ</a></li>
+          <!-- ログインしていない時 -->          
+          <li><%= link_to "ご利用の流れ", howtouse_path %></li>
           <li><%= link_to "アカウント作成", new_user_registration_path %></li>
           <li><%= link_to "ログイン", new_user_session_path %></li>
         <% else %>
           <!-- ログインしている時 -->
           <li>
             <%= link_to conversations_path do %>
-              <i class="fa fa-envelope"></i> メッセージ
+              <i class="fa fa-envelope"></i> メッセージ<span class="badge"></span>
             <% end %>
           </li>
-          <li><%= link_to "シッターになる", new_listing_path %></li>
+
+          
+          <li><%= link_to "動画を投稿する", new_listing_path %></li>
+          
+          
+          <li><%= link_to "ご利用の流れ", howtouse_path %></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <% if current_user.provider.present? %>
@@ -47,9 +47,7 @@
             <ul class="dropdown-menu">
               <li><%= link_to "プロフィール", user_path(current_user) %></li>
               <li><%= link_to "プロフィール編集",  edit_user_registration_path %></li>
-              <li><%= link_to "リスティング管理",  listings_path %></li>
-              <li><%= link_to "ペットを預ける",  reservations_path %></li>
-              <li><%= link_to "シッター予定",  reserved_path %></li>
+              <li><%= link_to "投稿動画管理",  listings_path %></li>
               <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
             </ul>
           </li>          

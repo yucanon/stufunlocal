@@ -1,31 +1,29 @@
 class ListingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_listing, only: [:show, :update, :basics, :description, :address, :price, :photos, :calendar, :bankaccount, :publish]
-  before_action :access_deny, only: [:basics, :description, :address, :price, :photos, :calendar, :bankaccount, :publish]
+  before_action :set_listing, only: [:show, :update, :basics, :address, :goalprice, :perprice, :genre, :photos, :articles, :bankaccount,:publish]
+  before_action :access_deny, only: [:basics, :goalprice, :address, :perprice, :genre, :photos, :bankaccount, :publish]
+
   def index
-    @listings = current_user.listings
+    @listing = current_user.listing
   end
 
   def show
+    @user = User.find(params[:id])
     @photos = @listing.photos
-
-    # 今のユーザーがこのリスティングを予約しているか否か
-    @currentUserBooking = Reservation.where("listing_id = ? AND user_id = ?",@listing.id,current_user.id).present? if current_user
-    
-    @reviews = @listing.reviews
-    
+    @articles = @listing.articles
+    @currentUserCharged = Charge.where("listing_id = ? AND user_id = ?",@listing.id,current_user.id).present? if current_user
+    @reviews = @listing.reviews  
     @currentUserReview = @reviews.find_by(user_id:  current_user.id) if current_user
-
   end
 
   def new
     # 現在のユーザーのリスティングの作成
-    @listing = current_user.listings.build
+    @listing = current_user.build_listing
   end
 
   def create
     # パラメーターとともに現在のユーザーのリスティングを作成
-    @listing = current_user.listings.build(listing_params)
+    @listing = current_user.build_listing(listing_params)
 
     if @listing.save
       redirect_to manage_listing_basics_path(@listing), notice: "リスティングを作成・保存をしました"
@@ -47,25 +45,27 @@ class ListingsController < ApplicationController
   def basics
   end
 
-  def description
-  end
-
   def address
   end
 
-  def price
+  def goalprice
   end
 
-  def photos
-    @photo = Photo.new
-  end
-
-  def calendar
+  def perprice
   end
 
   def bankaccount
     @user = @listing.user
     session[:listing_id] = @listing.id
+  end
+
+  def photos
+  end
+
+  def genre
+  end
+
+  def articles
   end
 
   def publish
@@ -81,19 +81,17 @@ class ListingsController < ApplicationController
 
   private
   def listing_params
-    params.require(:listing).permit(:home_type, :pet_type, :breeding_years, :pet_size, :price_pernight, :address, :listing_title, :listing_content, :active)
+    params.require(:listing).permit(:price, :goal_price, :address, :listing_title, :listing_content, :video, :image,:genre, :active,:picup)
   end
 
   def set_listing
     @listing = Listing.find(params[:id]) 
   end
-  
+
   def access_deny
     if !(current_user == @listing.user)
       redirect_to root_path, notice: "他人の編集ページにはアクセスできません"
     end
   end
-
-
 
 end

@@ -63,7 +63,7 @@
   // You can select to pay either directly or via the platform, so
   // we need both publishable keys here.
   window.publishable = {
-    platform: "<%= ENV['pk_test_qTDFyrb3Hbdc5HfKPmFLilLL'] %>"
+    platform: "<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>"
   };
   window.currentUserEmail = "<%= current_user.email %>";
 

@@ -18,11 +18,15 @@ class MessagesController < ApplicationController
   def create
     @message = @conversation.messages.new(message_params)
     @messages = @conversation.messages.order("created_at DESC")
-
     if @message.save
       #create.js.erb　が実行される
       respond_to do |format|
-        format.js
+      if @message.moneygift.blank?
+      else
+        redirect_to root_path, notice: "お祝い金の申請承りました！スタッフが確認し次第スタッフのアカウントからメッセージをお送りさせていただきます！"
+      end
+
+      format.js
       end
     end
   end
@@ -34,6 +38,6 @@ class MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:body, :user_id)
+    params.require(:message).permit(:body, :user_id, :moneygift)
   end
 end

@@ -3,8 +3,19 @@
 @import "toastr";
 @import "dropzone/dropzone";
 @import "jquery-ui/datepicker";
-@import "jquery-bootstrap-datepicker";
 
+/*
+ *= require font-awesome
+ */
+
+.html {
+    height: 100%;
+}
+
+.body {
+    height: 100%;
+    margin: 0;
+}
 
 .jumbotron {
   padding-top: 0px;
@@ -13,21 +24,33 @@
   background-size: cover;
   // 背景画像の位置を決める
   background-position: 50% 50%;
-  height: 420px;
+  height:70vh;
   position: relative;
-}
+  }
+.jumbotron-listings {
+  padding-top: 0px;
+  // 背景画像を暗くする
+  background: linear-gradient( rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05) ), url(person-845325_1920.jpg);
+  background-size: cover;
+  // 背景画像の位置を決める
+  background-position: 50% 50%;
+  height: 280px;
+  position: relative;
+  }
 
 .jumbotron .container .row{
     margin-top: 100px;
-    color: #fff;
 }
 
+.navbar-inverse{
+  background-color:black;
+  color: black;
+  z-index: 100;
+}
 .navbar-default {
-    background: transparent;
-    border-color: transparent;
-    z-index: 10;
+  background: transparent;
+  border-color: transparent;
 }
-
 .navbar-default .navbar-nav > li > a {
     color: white;
     font-size: 13px;
@@ -45,22 +68,15 @@
 .navbar-devise {
     background: #fff;
     border-color: #fff;
-    z-index: 10;
 }
 
 .navbar-devise .navbar-nav > li > a {
-    color: #222222;
+    color: white;
     font-size: 13px;
 }
 
 .navbar-devise .navbar-brand {
-    color: #222222;
-}
-
-// トップページのnavbarのドロップダウンがクリックされた時
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
-    background-color: transparent;
-    color: #555;
+    color: white;
 }
 
 //facebookボタン
@@ -409,11 +425,10 @@ li#nav-publish a{
   border-radius: 0;
 }
 
-
 // トップページのportfolioのcss
 .portfolio-item a img{
   width: 100%;
-  height: 200px;
+  height: 250px;
 }
 
 .portfolio-caption{
@@ -503,20 +518,22 @@ footer ul.quicklinks {
 }
 
 section h2.section-heading {
-  font-size: 40px;
+  font-size: 30px;
   margin-top: 0;
   margin-bottom: 15px;
 }
 section h3.section-subheading {
-  font-size: 16px;
+  font-size: 20px;
   font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-transform: none;
   font-style: italic;
   font-weight: 400;
 }
 
-#search-result .panel-body{
-  height: 95px;
+section h2.service-heading {
+  font-size: 25px;
+  margin-top: 0;
+  margin-bottom: 15px;
 }
 
 a {
@@ -527,3 +544,4 @@ body {
     color: #222;
     background-color: #F8F8F8;
 }
+

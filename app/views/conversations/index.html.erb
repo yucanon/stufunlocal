@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading text-center">
-                    Conversations
+                    メッセージ一覧
                 </div>            
                 <% @conversations.each do |conversation| %>
                     <% other = conversation.sender == current_user ? conversation.recipient : conversation.sender %>
@@ -12,10 +12,14 @@
                         <div class="panel-body panel-conversation">
                             <div class="row">
                                 <div class="col-md-2 text-center row-space-1">
-                                    <%= image_tag other.image, class: "img-circle profile-1" %><br>
-                                    <strong><%= other.name %></strong> 
-                                </div>
                                 <%= link_to conversation_messages_path(conversation) do %>
+                                <%if !other.image.blank? && !other.name.blank? %>
+            <%= image_tag other.image, class: "img-circle profile-1" %><br><strong><%= other.name %></strong>
+        <%else%>
+            <%= image_tag ("avatar-default.png"),class:"img-circle profile-1" %>
+        <%end%> 
+                                </div>
+                                
                                     <div class="col-md-8">
                                         <%= conversation.messages.last.body %>
                                     </div>

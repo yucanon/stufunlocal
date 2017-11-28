@@ -11,6 +11,6 @@
 #   stripe_publishable_key: pk_live_9lcthxpSIHbGwmdO941O1XVU
 
 
-STRIPE_CONNECT_CLIENT_ID: "ca_ArNG0BxX558D07ETn3ZpdtsGtbhes0YA"
-STRIPE_SECRET_KEY: "sk_test_iS5AM97fYfdMpcFCKIkkSTCr"
-STRIPE_PUBLISHABLE_KEY: "pk_test_qTDFyrb3Hbdc5HfKPmFLilLL"
+STRIPE_CONNECT_CLIENT_ID: "ca_AvOGWSiOl4oMSb98WZ8DB9DXbFkcKClt"
+SECRET_KEY: "sk_live_tvUlE464YzRjUvppaeIfUEsZ"
+PUBLISHABLE_KEY: "pk_live_RNiiVe3wleSowx5jRXp8O4Ub"

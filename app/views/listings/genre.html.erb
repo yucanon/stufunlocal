@@ -1,0 +1,34 @@
+<%= render 'partial/navbar' %>
+<div class="container">
+    <div class="col-md-3">
+        <!-- vertical-navbar -->
+        <%= render 'partial/verticalnavbar'%>
+    </div>
+    <div class="col-md-9">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+              <div class="text-center">
+                  <span style="font-size:24px;">得意分野選択</span>
+              </div>
+          </div>
+
+          <div class="panel-body">           
+              <%= form_for @listing do |f| %>
+                  <div class="row">
+                      <div class="col-md-12 select">
+                          <div class="form-group">
+                              <label>得意分野</label>
+                              <%= f.select :genre, [["IT","IT"], ["コンサルタント","コンサルタント"], ["営業","営業"]], {prompt:"選択してください"}, {required: 'true', autofocus: 'true', class: 'form-control'} %>
+                          </div>
+                      </div>
+                  </div>
+                  <br>
+
+                  <div class="actions">
+                      <%= f.submit "更新", class: "btn btn-danger" %>
+                  </div>
+              <% end %>
+          </div>
+      </div>
+  </div>
+</div>

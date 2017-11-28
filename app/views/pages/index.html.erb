@@ -1,17 +1,15 @@
-<script type="text/javascript">
-  $(function(){
-    $(".navbar").removeClass("navbar-devise");
-    $(".navbar").addClass("navbar-default");
-  });
-</script>
-
 <div class="jumbotron">
-  <%= render 'partial/navbar' %>
+	<%= render 'partial/navbar' %>
 
   <div class="container">
    <div class="row">
-     <div class="col-md-6 col-md-offset-3 text-center">
-       <h1 class="display-3">Hello, world!</h1>
+     <div class="col-xs-10 col-xs-offset-1" style=" position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  -webkit- transform: translateY(-50%) translateX(-50%); text-align:center; margin-left:0%;">
+       <h1 class="display-3" style="margin-top:-2%;"><br>Stufun</h1>
+       <h3 class="col-sm-offset-3 col-sm-6" style="font-size:20px;">動画で自分の得意なことをアピールし企業と出会う</h3>
      </div>
    </div> 
   </div>
@@ -21,83 +19,165 @@
     <%= form_tag search_path, method: :get do %>
       <div class="row">
         <div class="container">
+
+        <%= search_form_for @search, url: search_path do |f| %>
           
-          <%= hidden_field_tag :lat %>
-          <%= hidden_field_tag :lng %>
+          <div class="col-xs-10 col-md-11" style="padding-right: 0px">
+            <%= f.select :genre_eq_any, [["IT","IT"], ["コンサルタント","コンサルタント"], ["営業","営業"]], {:include_blank=>"得意な分野から検索",:selected => session[:genre_eq_any]},{required: 'true', autofocus: 'true', class: 'form-control'} %>
+          </div>
+          <%end%>
 
-          <div class="col-md-7 col-xs-10" style="padding-right: 0px">
-            <%= text_field_tag :search, params[:search], placeholder: "希望の場所はどこですか？", class: "form-control",id:"top-search-form" %>
-          </div>
-
-          <div class="col-md-2 hidden-xs hidden-sm">
-            <%= text_field_tag :start_date, params[:start_date], placeholder: "チェックイン", class: "form-control" %>
-          </div>
-          <div class="col-md-2 hidden-xs hidden-sm">
-            <%= text_field_tag :end_date, params[:end_date], placeholder: "チェックアウト", class: "form-control" %>
-          </div>
-          <div class="col-md-1 col-xs-2" style="padding-left: 0px; ">
+          <div class="col-xs-2 col-md-1" style="padding-left: 0px; ">
             <%= submit_tag "検索", class: "btn btn-danger" %>
           </div>
         </div>
       </div>
     <% end %>
   </div>
+
 </div>
 
-<div class="container">  
-  <!-- ご利用の流れ -->
-  <section id="services">
-    <div class="container">
-      <div class="row row-space-4">
-        <div class="col-lg-12 text-center">
-          <h2 class="section-heading">ご利用の流れ</h2>
-          <h3 class="section-subheading">Petshuggyはペットを預けるサービスです</h3>
+<div class="container"> 
+
+<section id="portfolio" class="bg-light-gray row-space-top-4 row-space-4">
+    <div class="container" style="">
+      <div class="row row-space-2">
+        <div class="col-xs-12 text-center">
+          <h2 class="section-heading"><br>ピックアップ動画</h2>
+          <h4 class="section-subheading"></h4>
         </div>
       </div>
-      <div class="row text-center">
-        <div class="col-md-4">
-          <%= image_tag 'search-icon'%>
-          <h4 class="service-heading">探す</h4>
-          <p class="text-muted hidden-xs">まず、ペットを預けるペットシッターをこのサイトで検索しましょう。</p>
-        </div>
-        <div class="col-md-4">
-          <%= image_tag 'calendar-icon'%>
-          <h4 class="service-heading">予約する</h4>
-          <p class="text-muted hidden-xs">いいなと思うペットシッターがいたら、ペットを預けたい日にちを予約しましょう。</p>
-        </div>
-        <div class="col-md-4">
-          <%= image_tag 'home-icon'%>
-          <h4 class="service-heading">預ける</h4>
-          <p class="text-muted hidden-xs">予約した日の当日になったら、ペットを預けて、自分たちの時間を楽しみましょう！</p>
-        </div>
+
+    <div class="row" style="margin-top:7%; margin-bottom:7%;">
+      <% @users.each do |user|%>
+        <% if !user.listing.blank?%>
+          <% if !user.listing.listing_title.blank? && !user.listing.listing_content.blank? && !user.listing.video.blank? && !user.listing.image.blank? && !user.listing.picup.blank? %>
+            <div class="col-xs-offset-0 col-md-4 col-xs-12 portfolio-item row-space-2" style="background: #000;">
+              <%= link_to listing_path(user.listing).first(8) do %>
+                <%= link_to user.listing.video_url.to_s, id: "video" do %>
+<%= image_tag user.listing.image.to_s, style: "box-shadow: 0 10px 10px #666666; display:block;opacity: .6;" %>
+<i class="fa fa-caret-square-o-right" style="position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  margin:0;/*余計な隙間を除く*/
+  padding:0;/*余計な隙間を除く*/
+  color: white;/*アイコン色*/
+  font-size: 100px;"></i>  
+  <% end %>
+  <% end %>
+              <div class="portfolio-caption" style="font-size:17px;">
+                <%= link_to listing_path(user.listing) do %>
+                  <% if !user.name %>
+                  <% user.email %>
+                  <% else %>
+                  <% user.name %>
+                  <% end %>
+                <% end %>
+              <span style="font-size:17px;">さんを詳しくみてみる</span>
+              </div>
+            </div>
+            <% end %>
+          <% end %>
+        <% end %>
       </div>
     </div>
-  </section> 
+  </section>
 
-  <!--　おすすめのシッター -->
+
+
+
+
   <section id="portfolio" class="bg-light-gray row-space-top-4 row-space-4">
     <div class="container">
       <div class="row row-space-2">
-        <div class="col-lg-12 text-center">
-          <h3 class="section-heading">おすすめのシッター紹介</h3>
-          <h4 class="section-subheading">Petshuggy認定のペットシッターです</h4>
+        <div class="col-xa-12 text-center">
+          <h2 class="section-heading">新着動画</h2>
+          <h4 class="section-subheading"></h4>
         </div>
       </div>
 
-      <div class="row">
-        <% @users.each do |user|%>
-          <% if !user.listings.blank?%>
-            <div class="col-md-4 col-sm-6 portfolio-item row-space-2">
-              <%= link_to listing_path(user.listings[0]) do %>
-                <%= image_tag user.listings[0].photos[0].image.url(:medium) %>
-              <% end %>
-              <div class="portfolio-caption">
-                <%= image_tag user.image,class:"img-circle profile-1"%>
-                <span style="font-weight: bold;"><%= user.name %>さん</span>
+    <div class="row" style="margin-top:7%;">
+      <% @users.order('updated_at desc').each do |user|%>
+        <% if !user.listing.blank?%>
+          <% if !user.listing.listing_title.blank? && !user.listing.listing_content.blank? && !user.listing.video.blank? && !user.listing.image.blank? %>
+            <div class="col-xs-offset-0 col-md-4 col-xs-12 portfolio-item row-space-2" style="background: #000;">
+              <%= link_to listing_path(user.listing).first(8) do %>
+                <%= link_to user.listing.video_url.to_s, id: "video" do %>
+<%= image_tag user.listing.image.to_s, style: "box-shadow: 0 10px 10px #666666; display:block;opacity: .6;" %>
+<i class="fa fa-caret-square-o-right" style="position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%,-50%);
+  -webkit-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  margin:0;/*余計な隙間を除く*/
+  padding:0;/*余計な隙間を除く*/
+  color: white;/*アイコン色*/
+  font-size: 100px;"></i>  
+  <% end %>
+  <% end %>
+              <div class="portfolio-caption" style="font-size:17px;">
+                <%= link_to listing_path(user.listing) do %>
+                  <% if !user.name %>
+                  <% user.email %>
+                  <% else %>
+                  <% user.name %>
+                  <% end %>
+                <% end %>
+              <span style="font-size:17px;">さんを詳しくみてみる</span>
               </div>
             </div>
+            <% end %>
           <% end %>
         <% end %>
+      </div>
+    </div>
+    <%= paginate @users %>
+  </section>
+
+
+
+     <div class="row row-space-4" style="margin-top:15%;">
+        <div class="col-xs-offset-1 col-xs-10 text-center">
+        <h2 class="section-heading"><br><br><br>ご利用の流れ<br><br></h2>
+          <%= link_to raw("ご利用の流れを見てみる"),howtouse_path ,class:"", style:"font-size:30px;"%><br /><br>
+        </div>
+      </div>
+
+   
+  <section id="services">
+    <div class="container">
+      <div class="row row-space-4" style="margin-top:5%;">
+        <div class="col-xs-offset-1 col-xs-10 text-center">
+          <h2 class="section-heading"><br><br><br>Stufunとは</h2>
+        </div>
+      </div>
+
+      <div class="row row-space-4" style="margin-top:-10%;">
+        <div class="col-xs-offset-1 col-xs-10 text-center">
+          <h3 class="section-subheading">Stufunは不条理な立場に置かれても夢を追う若者が自分の得意なことを動画で投稿して夢を現実にするために必要な人に出会える。<br><br>その第一歩を応援するサービスです<br><br></h3>
+        </div>
+      </div>
+
+      <div class="row text-center" style="margin-bottom:20%;">
+        <div class="col-md-offset-0 col-md-4 col-xs-12">
+          <%= image_tag 'calendar-icon'%>
+          <h2 class="service-heading">自分の特技を動画で投稿し運命を変える</h2>
+          <h3 class="text-muted" style="font-size:20px;">たった一度の人生、自分の目標を諦めきれない。こちらのサイトは、私達の源体験から、目標や夢があり、諦めきれない、運命を変える人を応援したいから審査はなしでどなたでもお使いいただける形でやっております。</h3>
+        </div>
+        <div class="col-md-offset-0 col-md-4 col-xs-12" style="">
+          <%= image_tag 'search-icon'%>
+          <h2 class="service-heading" style="">将来有望な若者に出会い、採用できる</h2>
+          <h3 class="text-muted" style="font-size:20px;">会社の人事の方、リクルートしたい方はこちらのサービスで得意なことがある若者の動画をご自由にご覧いただくことができます。こちらのサービスで若者とご自由にメッセージでき、採用ができます。</h3>
+        </div>
+        <div class="col-md-offset-0 col-md-4 col-xs-12" style="">
+          <%= image_tag 'home-icon'%>
+          <h2 class="service-heading" style="">サービス使用料無料</h2>
+          <h3 class="text-muted" style="font-size:20px; margin-bottom:45%;">こちらのサービスは完全無料でご利用いただけます。若者と企業の採用マッチングの制約料で運営いたします</h3>
+        </div>
       </div>
     </div>
   </section>
@@ -105,55 +185,9 @@
 
 <%= render 'pages/footer' %>
 
-<!-- datepickerのスクリプト -->
-<script>
-  $(function() {
-    $("#start_date").datepicker({
-      dateFormat: 'dd-mm-yy',
-      minDate: 0,
-      maxDate: '3m',
-      onSelect: function(selected) {
-        $('#end_date').datepicker("option", "minDate", selected);
-        $('#end_date').attr('disabled', false);
-      }
-    });
 
-    $("#end_date").datepicker({
-      dateFormat: 'dd-mm-yy',
-      minDate: 0,
-      maxDate: '3m',
-      onSelect: function(selected) {
-        $('#start_date').datepicker("option", "maxDate", selected);
-      }
-    });
-  })
-</script>
 
-<script>
-function init() {
 
-  var input = /** @type {!HTMLInputElement} */(
-      document.getElementById('top-search-form'));
 
-  var autocomplete = new google.maps.places.Autocomplete(input);
-  
-  autocomplete.addListener('place_changed', function() {
+    
 
-    var place = autocomplete.getPlace();
-    var lat = place.geometry.location.lat();
-    var lng = place.geometry.location.lng();
-
-    document.getElementById('lat').value = lat ;
-    document.getElementById('lng').value = lng ;
-
-    if (!place.geometry) {
-      window.alert("Autocomplete's returned place contains no geometry");
-      return;
-    }
-
-  });
-}
-
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1BoiSo2jL950_AuFzV-f9ETgKn0uQl2I&signed_in=true&libraries=places&callback=init"
-    async defer></script>

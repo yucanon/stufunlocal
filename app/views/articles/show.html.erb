@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @article.title %>
+</p>
+
+<%= link_to @article.video_url.to_s, id: "video" do %>
+
+<%= image_tag('movie') %>
+<% end %>
+
+
+<%= flowplayer_for :video, '/flowplayer.swf' do |player|
+  player.playlist [{:autoplay => true,
+                    :autoBuffering => true}]
+  player.onload do
+    'this.unmute();'
+  end
+end%>

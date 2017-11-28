@@ -1,12 +1,14 @@
 class PhotosController < ApplicationController
+    before_action :authenticate_user!
     def create
-        @photo = Photo.new(photo_params)
-        if @photo.save
-            render json: { message: "success", photoId: @photo.id }, status: 200
-        else
-            render json: { error: @photo.errors.full_messages.join(", ") }, status: 400
-        end
-    end
+    @photo = Photo.new(photo_params)
+    
+      if @article.save
+        render json: { message: "success", photoId: @photo.id }, status: 200
+      else
+        render json: { error: @photo.errors.full_messages.join(", ") }, status: 400
+      end
+  end
 
     def destroy
         @photo = Photo.find(params[:id])

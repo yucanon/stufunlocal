@@ -1,0 +1,72 @@
+<%= render 'partial/navbar' %>
+<div class="container">
+    <div class="col-md-3">
+        <!-- vertical-navbar -->
+        <%= render 'partial/verticalnavbar'%>
+    </div>
+    <div class="col-md-9 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="text-center">
+                    <span style="font-size:20px;">リスティング動画の編集</span>
+                </div>
+            </div>
+
+            <div class="panel-body">
+            <% if @listing.video.blank? %>
+            　<h5><br>動画を上げる際、少々お時間がかかる場合がございます<br>予めご了承ください<br></h5>   
+                <%= form_for @listing do |f| %>
+
+  <div class="field">
+  <%= f.label :video %><br>
+  <%= f.file_field :video, :accept => 'video/*', required: "true"%>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "更新", class: "btn btn-danger" %>
+  </div>
+<% end %>
+
+<% else %>
+<h5><br>動画はすでに埋め込まれています。動画を上げる際、少々お時間がかかる場合がございます<br>予めご了承ください<br></h5>
+
+<%= form_for(@listing) do |f| %>
+
+<%= link_to @listing.video_url.to_s, id: "video" do %>
+<% image_tag ("movie.jpeg"), style:"height:150px; display: block; margin-left: auto; margin-right: auto;" %>
+<% end %>
+
+<h5><br><br>新しい動画にする場合、<br>
+こちらにアップロードをお願いします。<br></h5>
+
+  <% if @listing.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@listing.errors.count, "error") %> prohibited this article from being saved:</h2>
+
+      <ul>
+      <% @listing.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :video %><br>
+    <%= f.file_field :video, :accept => 'video/*' %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+<% end %>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- dropzone.js -->

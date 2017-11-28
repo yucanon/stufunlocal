@@ -1,13 +1,8 @@
 class PagesController < ApplicationController
   def index #views/index.html.erbを表示させるというアクション
-    @users = User.all
-  end
-
-  def search
+    @users = User.all.page(params[:page]).per(3)
     if params[:search].present?
 
-      session[:address] = params[:search]
-      
       if params["lat"].present? & params["lng"].present? 
         @latitude = params["lat"]
         @longitude = params["lng"]
@@ -19,60 +14,34 @@ class PagesController < ApplicationController
         @longitude = geolocation[1]
       end
 
-      @listings = Listing.where(active: true).near(geolocation, 1, order: 'distance')
+      @listings = Listing.near(geolocation, 1, order: 'distance')
 
     # 検索欄が空欄の場合
     else
-      @listings = Listing.where(active: true).all
-      @latitude = @listings.to_a[0].latitude
-      @longitude = @listings.to_a[0].longitude  
+
+      @listings = Listing.all
+
     end
 
     # Ransack q のチェックボックス一覧
     if params[:q].present? 
 
-      if params[:q][:price_pernight_gteq].present?
-        session[:price_pernight_gteq] = params[:q][:price_pernight_gteq]
+      if params[:q][:genre_eq_any].present?
+        session[:genre_eq_any] = params[:q][:genre_eq_any]
+        session[:IT] = session[:genre_eq_any].include?("IT")
+        session[:Consultant] = session[:genre_eq_any].include?("コンサルタント")
+        session[:Sales] = session[:genre_eq_any].include?("営業")
       else
-        session[:price_pernight_gteq] = nil
-      end
-
-      
-      if params[:q][:price_pernight_lteq].present?
-        session[:price_pernight_lteq] = params[:q][:price_pernight_lteq]
-      else
-        session[:price_pernight_lteq] = nil
-      end
-
-      if params[:q][:home_type_eq_any].present?
-        session[:home_type_eq_any] = params[:q][:home_type_eq_any]
-        session[:House] = session[:home_type_eq_any].include?("一軒家")
-        session[:Mansion] = session[:home_type_eq_any].include?("マンション")
-        session[:Apartment] = session[:home_type_eq_any].include?("アパート")
-      else
-        session[:home_type_eq_any] = ""
-        session[:House] = false
-        session[:Mansion] = false
-        session[:Apartment] = false
-      end
-
-      if params[:q][:pet_type_eq].present?
-        session[:pet_type_eq] = params[:q][:pet_type_eq]
-      else
-        session[:pet_type_eq] = nil
-      end
-
-
-      if params[:q][:breeding_years_gteq].present?
-        session[:breeding_years_gteq] = params[:q][:breeding_years_gteq]
-      else
-        session[:breeding_years_gteq] = nil
+        session[:genre_eq_any] = ""
+        session[:IT] = false
+        session[:Consultant] = false
+        session[:Sales] = false
       end
 
     end 
 
     # Q条件をまとめたものをセッションQに入れる
-    session[:q] = {"price_pernight_gteq"=>session[:price_pernight_gteq], "price_pernight_lteq"=>session[:price_pernight_lteq],  "home_type_eq_any"=>session[:home_type_eq_any], "pet_type_eq"=>session[:pet_type_eq], "breeding_years_gteq"=>session[:breeding_years_gteq]}
+    session[:q] = {"genre_eq_any"=>session[:genre_eq_any]}
 
 
     # ransack検索
@@ -81,6 +50,75 @@ class PagesController < ApplicationController
 
      #リスティングデータを配列にしてまとめる 
     @arrlistings = @result.to_a
+  end
+
+  def howtouse
+  end
+
+  def search
+    if params[:search].present?
+
+      if params["lat"].present? & params["lng"].present? 
+        @latitude = params["lat"]
+        @longitude = params["lng"]
+
+        geolocation = [@latitude,@longitude]
+      else
+        geolocation = Geocoder.coordinates(params[:search])
+        @latitude = geolocation[0]
+        @longitude = geolocation[1]
+      end
+
+      @listings = Listing.near(geolocation, 1, order: 'distance')
+
+    # 検索欄が空欄の場合
+    else
+
+      @listings = Listing.all
+
+    end
+
+    # Ransack q のチェックボックス一覧
+    if params[:q].present? 
+
+      if params[:q][:genre_eq_any].present?
+        session[:genre_eq_any] = params[:q][:genre_eq_any]
+        session[:IT] = session[:genre_eq_any].include?("IT")
+        session[:Consultant] = session[:genre_eq_any].include?("コンサルタント")
+        session[:Sales] = session[:genre_eq_any].include?("営業")
+      else
+        session[:genre_eq_any] = ""
+        session[:IT] = false
+        session[:Consultant] = false
+        session[:Sales] = false
+      end
+
+    end 
+
+    # Q条件をまとめたものをセッションQに入れる
+    session[:q] = {"genre_eq_any"=>session[:genre_eq_any]}
+
+
+    # ransack検索
+    @search = @listings.ransack(session[:q])
+    @result = @search.result(distinct: true)
+
+     #リスティングデータを配列にしてまとめる 
+    @arrlistings = @result.to_a
+
+
+
+  def ajaxsearch
+    
+    # まずajaxで送られてきた緯度経度をセッションに入れる
+    if !params[:geolocation].blank?
+      geolocation = params[:geolocation]
+    end
+
+    @listings = Listing.near(geolocation, 1, order: 'distance')
+
+    #リスティングデータを配列にしてまとめる 
+    @arrlistings = @listings.to_a
 
     # start_date end_dateの間に予約がないことを確認.あれば削除
     if ( !params[:start_date].blank? && !params[:end_date].blank? )
@@ -111,23 +149,6 @@ class PagesController < ApplicationController
     end
   end
 
-  def ajaxsearch
-    
-    # まずajaxで送られてきた緯度経度をセッションに入れる
-    if !params[:geolocation].blank?
-      geolocation = params[:geolocation]
-    end
-
-    # まずajaxで送られてきた緯度経度をセッションに入れる
-    if !params[:location].blank?
-      session[:address] = params[:location]
-    end
-
-    @listings = Listing.where(active: true).near(geolocation, 1, order: 'distance')
-
-    #リスティングデータを配列にしてまとめる 
-    @arrlistings = @listings.to_a
-
     # start_date end_dateの間に予約がないことを確認.あれば削除
     if ( !session[:start_date].blank? && !session[:end_date].blank? )
 
@@ -153,7 +174,6 @@ class PagesController < ApplicationController
       end
     end
 
-    respond_to :js
   
   end
 end

@@ -1,0 +1,44 @@
+
+<%= render 'partial/navbar' %>
+
+<div class="container">
+    <!-- listing content -->
+  <div class="col-md-8 col-md-offset-2">
+    <div class="thumbnail">
+      <%= image_tag @listing.photos[0].image.url %>
+      <%= image_tag @listing.user.image,class:"img-circle profile-1 row-space-top-3" %>
+      <div class="caption">
+        <h4 class="text-center row-space-4">ホスト名: <%= @listing.user.name %></h4>
+        <h4 class="text-center row-space-4">リスティングタイトル:<%= @listing.listing_title %></h4>
+        <h4 class="text-center row-space-4">リスティングコンテント:<%= @listing.listing_content %></h4>
+
+        <h4 class="text-center row-space-4">目標金額:<%= @listing.goal_price %>円</h4>
+
+        <h4 class="text-center row-space-4">支払い金額:<%= @listing.price %>円</h4>
+ 
+
+        <!--Stripe order and credit form -->
+
+        <!-- Send to reservations#create action -->
+ <%= form_for([@listing, @listing.charges.new], method: :post) do |f| %>
+   <%= hidden_field_tag :stripeToken %>
+   <%= f.hidden_field :listing_id %>
+    <input id="listing_id" name="listing_id" type="hidden" value="@listing.id" />
+   <%= f.hidden_field :price, value: @listing.price %>
+    <input id="price" name="price" type="hidden" value="<%= @listing.price %>" />
+
+          <div class='indicator'></div>
+          <div class="row">
+            <div class="text-center">
+            
+
+               <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_live_RNiiVe3wleSowx5jRXp8O4Ub" data-amount="<%= @listing.price %>" data-currency="jpy" data-name="pets" data-description="2 widgets" data-image="https://stripe.com/img/documentation/checkout/marketplace.png" data-locale="auto"></script> 
+
+              
+          </div>
+            
+        <% end %>
+      </div>     
+    </div>    
+  </div>
+</div>
